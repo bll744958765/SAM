@@ -1,14 +1,10 @@
 
-
 import torch.nn.parallel
 import warnings
-
 warnings.filterwarnings("ignore")
 import torch as torch
 import torch.nn.parallel
 import warnings
-
-
 warnings.filterwarnings("ignore")
 import torch.nn as nn
 import torch.nn.functional as F
@@ -29,11 +25,9 @@ def set_seed(seed=42):
     if torch.cuda.is_available():
         torch.cuda.manual_seed(seed)
         torch.cuda.manual_seed_all(seed)
-
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.enabled = False
-
 
 start = time.perf_counter()
 time.sleep(2)
@@ -75,8 +69,6 @@ class SAM(nn.Module):
         edge_weight = torch.where(edge_weight > 10, torch.tensor(0).to(self.device), edge_weight)
         coords0 = self.fc_coords(c)
         attri0 = self.fc_attri(x)
-
-
         gcn_output1 = F.relu(F.dropout(self.gcn1(c, edge_index, edge_weight), training=self.training))
         mlp_output1 = F.relu(F.dropout(self.fc1(x), training=self.training))
 
@@ -98,8 +90,6 @@ class SAM(nn.Module):
         if self.res:
             gcn_output3 = torch.add(gcn_output2, gcn_output3)
             mlp_output3 = torch.add(mlp_output2, mlp_output3)
-
-
         combined = torch.cat([gcn_output3, mlp_output3], dim=1)
         output = self.decoder(combined)
         mean = output[:, 0]
@@ -117,7 +107,6 @@ class Decoder(nn.Module):
             nn.ReLU(),
             nn.Linear(input_dim, output_dim),
         )
-
     def forward(self, x):
         return self.mlp(x)
 

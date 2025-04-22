@@ -1,5 +1,5 @@
 # Load the TensorBoard notebook extension
-
+import torch
 import torch.nn.parallel
 
 import torch.nn as nn
@@ -8,10 +8,8 @@ import torch.utils.data
 import numpy as np
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import warnings
-
 warnings.filterwarnings("ignore")
 import argparse
-
 import datetime
 import time
 from datetime import datetime
@@ -39,14 +37,11 @@ def set_seed(seed=42):
 
 set_seed(42)
 
-import torch
-
 torch.cuda.empty_cache()
 
 
 def train(args):
     # Get args
-    list0 = []
     list1 = []
     for xuhao in range(args.n_xuhao):
 
@@ -55,7 +50,6 @@ def train(args):
         n_epochs = args.epochs
         lr = args.lr
         k = args.k
-
         MMD = args.MMD
         seed = xuhao
         res = args.residual_training
@@ -80,7 +74,7 @@ def train(args):
             id, c, x, y = get_generation_data(norm_coords=False, norm_x=False, norm_y=False, norm_min_val=min_val)
         if dset == 'Near-surface':
             id, c, x, y = get_near_surface_data(norm_coords=True, norm_x=True, norm_y=False, norm_min_val=min_val)
-        train_loader, val_loader, test_loader = loader(id, c, x, y, train_size, batch_size, seed)
+        train_loader, test_loader = loader(id, c, x, y, train_size, batch_size, seed)
 
         # Tensorboard and logging
         test_ = dset + '-' + model_name + '-' + loss_name + '-size' + str(train_size) + '-k' + str(k) + '-emb' + str(emb_dim)
@@ -90,7 +84,6 @@ def train(args):
         if MMD:
             test_ = test_ + "_2MMD" + str(args.lamba)
 
-
         saved_file = "{}_{}{}".format(test_,
                                       datetime.now().strftime("%h"),
                                       datetime.now().strftime("%d"),
@@ -98,7 +91,6 @@ def train(args):
                                       # datetime.now().strftime("%M"),
 
                                       )
-
         # Training loop
         it_counts = 0
         train_losses = []
@@ -121,8 +113,7 @@ def train(args):
         model = model.float()
         lambda_param = nn.Parameter(torch.tensor(args.lamba))
         optimizer = torch.optim.Adam(list(model.parameters()) + [lambda_param], lr=lr)
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100)
-
+        # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100)
         def init_weights(m):
             if type(m) == nn.Linear:
                 torch.nn.init.xavier_uniform_(m.weight)
@@ -143,9 +134,7 @@ def train(args):
                 y = batch[3].reshape(-1, 1)
 
                 optimizer.zero_grad()
-
                 train_outputs, variance, gcn_out, mlp_out = model(c, x)
-
                 loss = loss1(train_outputs, y.float())
 
                 if MMD:
@@ -175,9 +164,7 @@ def train(args):
                     c = batch[1]
                     x = batch[2]
                     y = batch[3].reshape(-1, 1)
-
                     outputs, variance, gcn_out, mlp_out = model(c, x)
-
                     loss = loss1(outputs, y.float())
 
                     if MMD:

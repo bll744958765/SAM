@@ -33,7 +33,6 @@ def normal(x, min_val=1):
     Parameters:
     x = numerical vector
     min_val = integer; choice of [0,1], setting whether normalization in range[0,1] or [-1,1]
-
     Return:
     x_norm = normalized vector
     '''
@@ -53,10 +52,7 @@ def normal(x, min_val=1):
 
 
 def get_cali_housing_data(norm_coords=True, norm_x=True, norm_y=False, norm_min_val=1):
-
     '''
-
-
     norm_x = logical; should features be normalized
     norm_y = logical;
     norm_min_val = integer; choice of [0,1], setting whether normalization in range[0,1] or [-1,1]
@@ -143,7 +139,6 @@ def get_near_surface_data(norm_coords=True, norm_x=False, norm_y=False, norm_min
         y = normal(y, norm_min_val)
     return torch.tensor(id).to(device).float(), torch.tensor(coords).to(device).float(), torch.tensor(x).to(device).float(), torch.tensor(y).to(device).float()
 
-
 def get_generation_data_test(norm_coords=False, norm_x=False, norm_y=False, norm_min_val=1):
     generate = pd.read_csv(r'./generate1.csv', encoding='gbk') #gegeration test dataset
     generate = np.array(generate)
@@ -176,7 +171,6 @@ def loader(id, coords, attributes, targets, train_size, batch_size, seed):
 
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=True)
 
-    val_loader = torch.utils.data.DataLoader(test_data, batch_size=batch_size)
     test_loader = torch.utils.data.DataLoader(test_data, batch_size=batch_size)
 
-    return train_loader, val_loader, test_loader
+    return train_loader, test_loader
