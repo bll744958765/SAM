@@ -1,15 +1,13 @@
 
 
-
 import torch.nn.parallel
-import torch.backends.cudnn as cudnn
 import warnings
 
 warnings.filterwarnings("ignore")
 import torch as torch
 import torch.nn.parallel
 import warnings
-import torch.distributions.normal as normal_dist
+
 
 warnings.filterwarnings("ignore")
 import torch.nn as nn
@@ -19,9 +17,7 @@ import random
 import os
 import time
 import numpy as np
-from scipy.stats import wasserstein_distance
-from math import radians, cos, sin, asin, sqrt
-import math
+
 
 
 def set_seed(seed=42):
@@ -42,77 +38,13 @@ def set_seed(seed=42):
 start = time.perf_counter()
 time.sleep(2)
 
-
-def knn_to_adj(knn, n):
-    adj_matrix = torch.zeros(n, n, dtype=float)  # lil_matrix((n, n), dtype=float)
-    for i in range(len(knn[0])):
-        tow = knn[0][i]
-        fro = knn[1][i]
-        adj_matrix[tow, fro] = 1  # should be bidectional?
-    return adj_matrix.T
-
-
-def haversine(lon1, lat1, lon2, lat2):
-    """
-    Calculate the great circle distance between two points
-    on the earth (specified in decimal degrees)
-    """
-    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
-
-    # haversine
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
-    c = 2 * asin(sqrt(a))
-    r = 6371
-    return c * r * 1000
-
-
-def newDistance(a, b, nd_dist="euclidean"):
-    # Distance options are ["great_circle" (2D only), "euclidean", "wasserstein" (for higher-dimensional coordinate embeddings)]
-
-    if a.shape[0] == 2:
-        x1, y1 = a[0], a[1]
-        x2, y2 = b[0], b[1]
-        if nd_dist == "euclidean":
-            d = math.sqrt(((x1 - x2) ** 2) + ((y1 - y2) ** 2))
-        else:  # nd_dist="great_circle"
-            d = haversine(x1, y1, x2, y2)
-    if a.shape[0] == 3:
-        x1, y1, z1 = a[0], a[1], a[2]
-        x2, y2, z2 = b[0], b[1], b[2]
-        d = math.sqrt(math.pow(x2 - x1, 2) +
-                      math.pow(y2 - y1, 2) +
-                      math.pow(z2 - z1, 2) * 1.0)
-    if a.shape[0] > 3:
-        if nd_dist == "wasserstein":
-            d = wasserstein_distance(a.reshape(-1).detach(), b.reshape(-1).detach())
-            # d = sgw_cpu(a.reshape(1,-1).detach(),b.reshape(1,-1).detach())
-        else:
-            d = torch.pow(a.reshape(1, 1, -1) - b.reshape(1, 1, -1), 2).sum(2)
-    return d
-
-
-# Helper function for edge weights
-def makeEdgeWeight(x, edge_index):
-    to = edge_index[0]
-    fro = edge_index[1]
-    edge_weight = []
-    for i in range(len(to)):
-        edge_weight.append(newDistance(x[to[i]], x[fro[i]]))  # probably want to do inverse distance eventually
-    max_val = max(edge_weight)
-    rng = max_val - min(edge_weight)
-    edge_weight = [(max_val - elem) / rng for elem in edge_weight]
-    return torch.Tensor(edge_weight)
-
-
-class PEGCN(nn.Module):
+class SAM(nn.Module):
     """
         GCN with positional encoder and auxiliary tasks
     """
 
     def __init__(self, num_features_c, num_features_x, k, emb_dim, res=True):
-        super(PEGCN, self).__init__()
+        super(SAM, self).__init__()
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.emb_dim = emb_dim
         self.k = k
@@ -137,14 +69,13 @@ class PEGCN(nn.Module):
         c = c.float()
 
         edge_index = knn_graph(c, k=self.k).to(self.device)
-
         row, col = edge_index
         distances = torch.norm(c[row] - c[col], p=2, dim=1)
         edge_weight = torch.exp(-distances / 2)  # 使用距离的指数函数
         edge_weight = torch.where(edge_weight > 10, torch.tensor(0).to(self.device), edge_weight)
-
         coords0 = self.fc_coords(c)
         attri0 = self.fc_attri(x)
+
 
         gcn_output1 = F.relu(F.dropout(self.gcn1(c, edge_index, edge_weight), training=self.training))
         mlp_output1 = F.relu(F.dropout(self.fc1(x), training=self.training))
@@ -159,7 +90,6 @@ class PEGCN(nn.Module):
         if self.res:
             gcn_output2 = torch.add(gcn_output1, gcn_output2)
             mlp_output2 = torch.add(mlp_output1, mlp_output2)
-
 
 
 
@@ -182,10 +112,8 @@ class PEGCN(nn.Module):
 class Decoder(nn.Module):
     def __init__(self, input_dim, output_dim):
         super(Decoder, self).__init__()
-        # self.fc = nn.Linear(input_dim, output_dim)
         self.mlp = nn.Sequential(
             nn.Linear(input_dim, input_dim),
-
             nn.ReLU(),
             nn.Linear(input_dim, output_dim),
         )
@@ -193,13 +121,3 @@ class Decoder(nn.Module):
     def forward(self, x):
         return self.mlp(x)
 
-
-def log_likelihood_loss(y_true, y_pred, variance):
-    y_true = y_true.cpu()
-    y_pred = y_pred.cpu()
-    variance = variance.cpu()
-
-    normal = normal_dist.Normal(loc=y_pred, scale=torch.tensor(variance))
-    log_likelihood = normal.log_prob(y_true)
-
-    loss = -torch.nanmean(log_likelihood)

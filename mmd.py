@@ -57,12 +57,6 @@ class MMDLoss(nn.Module):
             kernels = self.guassian_kernel(
                 source, target, kernel_mul=self.kernel_mul, kernel_num=self.kernel_num, fix_sigma=self.fix_sigma)
 
-            # 将核矩阵分为4份
-            # XX = torch.mean(kernels[:batch_size, :batch_size])
-            # YY = torch.mean(kernels[batch_size:, batch_size:])
-            # XY = torch.mean(kernels[:batch_size, batch_size:])
-            # YX = torch.mean(kernels[batch_size:, :batch_size])
-            # loss = torch.mean(XX + YY - XY - YX)
             XX = kernels[:batch_size, :batch_size]
             YY = kernels[batch_size:, batch_size:]
             XY = kernels[:batch_size, batch_size:]
@@ -70,7 +64,3 @@ class MMDLoss(nn.Module):
             loss = torch.mean(XX + YY - XY - YX)
             return loss
 
-
-# 注意source和target须为tensor，最终的MMD损失也为tensor。
-# 另外，source和target须为一个batch，如果源域和目标域数据为单个样本的话，则需要增加一个维度。
-# source和target的样本个数不要求一样，但第二维度须一样。
