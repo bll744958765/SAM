@@ -39,30 +39,63 @@ min_val:standardization
 
 ## Comparison test
 
-The results of the comparison experiments in Table 1 are available in the Comparison folder. The baseline methods have been named according to the dataset. The corresponding folder can be opened to find the corresponding baseline model code. For example, the Comparison/Generation/generation-LEGNNP-RNP folder is the model code for LEGNNP-RNP on the synthetic dataset.
+The results of the comparative experiments presented in Table 1 can be found in the Comparison folder. Each baseline method is organized and named according to the corresponding dataset. To locate the code for a specific baseline model, navigate to the appropriate subfolder. For example, the code for the LEGNNP-RNP model applied to the synthetic dataset is located in the Comparison/Generation/generation-LEGNNP-RNP directory.
 
-The experimental results in Table 2 can be obtained by running the code SAM. where Set dataset=‘generation’, model_name=[‘SAM_GCN’, ‘SAM_GAT’, ‘SAM_GraphSage’], batch_size=128, epochs=128, lr=0.1, lamba=0.1, emb_dim= 128, residual_training=[True,False], MMD=[True,False], , k=5. that is. The response prediction results can be found in the result_out.csv file under the corresponding traind folder.
+The experimental results presented in Table 2 can be reproduced by running the SAM code with the following configuration:
+dataset='generation', model_name=['SAM_GCN', 'SAM_GAT', 'SAM_GraphSage'], batch_size=128, epochs=128, lr=0.1, lambda=0.1, emb_dim=128, residual_training=[True, False], MMD=[True, False], and k=5.
+The response prediction results are saved in the result_out.csv file, located in the corresponding traind folder after training.
+
 ## Flexibility of the Model
 
-The experimental results in Table 2 can be obtained by running the code SAM. where Set dataset=‘generation’, model_name=[‘SAM_GCN’, ‘SAM_GAT’, ‘SAM_GraphSage’], batch_size=128, epochs=128, lr=0.1, lamba=0.1, emb_dim= 128, residual_training=[True,False], MMD=[True,False],  k=5. that is. The response prediction results can be found in the result_out.csv file under the corresponding traind folder.
+The experimental results shown in Table 2 can be reproduced by running the SAM code with the following configuration:
+dataset='generation', model_name=['SAM_GCN', 'SAM_GAT', 'SAM_GraphSage'], batch_size=128, epochs=128, lr=0.1, lambda=0.1, emb_dim=128, residual_training=[True, False], MMD=[True, False], and k=5.
+The response prediction results will be saved in the result_out.csv file, located in the corresponding traind folder after training.
 
 ## Self-adaptive Loss Weights Studies
-The experimental results in Table 3 can be obtained by running the SAM. where Set dataset=‘generation’, model_name=[‘SAM_GCN’, batch_size=128, epochs=128, lr=0.1, lamba=0.1, emb_dim= 128, residual_training=True, MMD=True,  k=5 lamba=0.1.   Running SAM_LAlpha0.1, SAM_Alpha0.5, SAM_Alpha1, the comparison results are obtained by setting lamba=[-1,-0.5,-0.1] in the hyperparameter selection. 
+The experimental results presented in Table 3 can be obtained by running the SAM model with the following settings:
+dataset='generation', model_name='SAM_GCN', batch_size=128, epochs=128, lr=0.1, lambda=0.1, emb_dim=128, residual_training=True, MMD=True, and k=5.
+
+To evaluate the effect of the hyperparameter lambda, experiments were conducted in the SAM_Alpha folder by running SAM_Alpha0.1, SAM_Alpha0.5, and SAM_Alpha1. The comparison results in Table 3 correspond to setting lambda=[-1, -0.5, -0.1] in the hyperparameter selection process.
 
 ## Ablation Study
-The results in Figure 10 run the corresponding code in the ablation study folder. We have named the folders according to the name of each method. Please run the code directly after dataset=[‘cali’, ‘generation’] to get the results.
+The results shown in Figure 10 can be obtained by running the corresponding code in the Ablation Study folder. Each folder is named according to the respective method. To reproduce the results, simply set dataset=['cali', 'generation'] and execute the code directly.
 
-The results in Figure 11 can be obtained by setting hyperparameters in the SAM folder
-
-    DATA = ‘generation’
+The results in Figure 11 can be reproduced by setting the hyperparameters in the SAM folder as follows:
+    DATA = 'generation'
     lr_list = [0.1, 0.005, 0.001]
     TRAIN_SIZE = [0.1, 0.2, 0.3]
     BATCHS = [32, 64, 128, 256]
     embedding = [32, 64, 128, 256]
 
 ## Visualisation
-The Figure folder contains all the data and code used to draw the graph. Where generation data.ipynb is used for the generation and visualisation code for the synthetic dataset and Figure(1).ipynb is used to draw all other figures. The data used to draw the plots is also contained in this folder.
+The Figure folder contains all the data and code required for plotting the figures in the manuscript. Specifically:
 
-If you need to generate raw data, you can run the appropriate code to do so.
-For example, if you need to generate the raw data for Figure 4(a) in the manuscript, run the LEGNN-RNP.py file in the generation_LEGNN-RNP folder. There is no need to adjust the hyperparameters here, and the prediction_0.csv can be obtained for plotting in the resulting generation/generation_LEGNN-RNP/trained file at the end of the code run.
-If you need to generate raw data for Figure 4(b) in the manuscript, run train.py in the SAM folder. Set dataset='generation', model_name='SAM_GCN', batch_size=128, epochs=128, lr=0.1, lamba=0.1, emb_dim=128, residual_training=True, MMD=True , k=5. After running the model, please get the file test_out0. in traind/generation-SAM-SAM_GCN-MAE-size0.1-k5-emb64-lr0.1-bs32-ep500-nor0-xuhao10_2MMD0.1_Apr/result.csv for plotting.
+generation data.ipynb includes the code for generating and visualizing the synthetic dataset (used in Figure 1).
+
+Figure(1).ipynb is used to generate all other figures.
+
+All necessary datasets for plotting are also provided in this folder.
+
+If you need to regenerate raw data for specific figures, you can execute the corresponding scripts:
+
+To generate the raw data for Figure 4(a):
+Run the LEGNN-RNP.py script in the generation_LEGNN-RNP folder.
+No hyperparameter adjustment is needed.
+Upon completion, the predicted results will be saved in:
+generation/generation_LEGNN-RNP/trained/prediction_0.csv
+
+To generate the raw data for Figure 4(b):
+Run the train.py script in the SAM folder with the following settings:
+dataset = 'generation'
+model_name = 'SAM_GCN'
+batch_size = 128
+epochs = 128
+lr = 0.1
+lamba = 0.1
+emb_dim = 128
+residual_training = True
+MMD = True
+k = 5
+
+After training, the predicted results will be located at:
+traind/generation-SAM-SAM_GCN-MAE-size0.1-k5-emb64-lr0.1-bs32-ep500-nor0-xuhao10_2MMD0.1_Apr/result.csv
