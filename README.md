@@ -46,10 +46,10 @@ The results of the comparison experiments in Table 1 are available in the Compar
 The experimental results in Table 2 can be obtained by running the code SAM. where Set dataset=‘generation’, model_name=[‘SAM_GCN’, ‘SAM_GAT’, ‘SAM_GraphSage’], batch_size=128, epochs=128, lr=0.1, lamba=0.1, emb_dim= 128, residual_training=[True,False], MMD=[True,False], , k=5. that is. The response prediction results can be found in the result_out.csv file under the corresponding traind folder.
 ## Flexibility of the Model
 
-The experimental results in Table 2 can be obtained by running the code SAM. where Set dataset=‘generation’, model_name=[‘SAM_GCN’, ‘SAM_GAT’, ‘SAM_GraphSage’], batch_size=128, epochs=128, lr=0.1, lamba=0.1, emb_dim= 128, residual_training=[True,False], MMD=[True,False], , k=5. that is. The response prediction results can be found in the result_out.csv file under the corresponding traind folder.
+The experimental results in Table 2 can be obtained by running the code SAM. where Set dataset=‘generation’, model_name=[‘SAM_GCN’, ‘SAM_GAT’, ‘SAM_GraphSage’], batch_size=128, epochs=128, lr=0.1, lamba=0.1, emb_dim= 128, residual_training=[True,False], MMD=[True,False],  k=5. that is. The response prediction results can be found in the result_out.csv file under the corresponding traind folder.
 
 ## Self-adaptive Loss Weights Studies
-The experimental results in Table 3 can be obtained by running the codes SAM_Alpha0.1, SAM_Alpha0.5, SAM_Alpha1. The comparison results are obtained by setting lamba=[-1,-0.5,-0.1] in the hyperparameter selection.
+The experimental results in Table 3 can be obtained by running the SAM. where Set dataset=‘generation’, model_name=[‘SAM_GCN’, batch_size=128, epochs=128, lr=0.1, lamba=0.1, emb_dim= 128, residual_training=True, MMD=True,  k=5 lamba=0.1.   Running SAM_LAlpha0.1, SAM_Alpha0.5, SAM_Alpha1, the comparison results are obtained by setting lamba=[-1,-0.5,-0.1] in the hyperparameter selection. 
 
 
 ## Visualisation
