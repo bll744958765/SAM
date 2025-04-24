@@ -13,8 +13,6 @@ random
 ## Running examples
 You can adjust the parameters:
 
-datafile: sampled dataset in folder "Data/dataset"
-
 batch_size: batch size
 
 lr: learning rate
