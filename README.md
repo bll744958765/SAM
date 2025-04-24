@@ -49,6 +49,16 @@ The experimental results in Table 2 can be obtained by running the code SAM. whe
 ## Self-adaptive Loss Weights Studies
 The experimental results in Table 3 can be obtained by running the SAM. where Set dataset=‘generation’, model_name=[‘SAM_GCN’, batch_size=128, epochs=128, lr=0.1, lamba=0.1, emb_dim= 128, residual_training=True, MMD=True,  k=5 lamba=0.1.   Running SAM_LAlpha0.1, SAM_Alpha0.5, SAM_Alpha1, the comparison results are obtained by setting lamba=[-1,-0.5,-0.1] in the hyperparameter selection. 
 
+## Ablation Study
+The results in Figure 10 run the corresponding code in the ablation study folder. We have named the folders according to the name of each method. Please run the code directly after dataset=[‘cali’, ‘generation’] to get the results.
+
+The results in Figure 11 can be obtained by setting hyperparameters in the SAM folder
+
+    DATA = ‘generation’
+    lr_list = [0.1, 0.005, 0.001]
+    TRAIN_SIZE = [0.1, 0.2, 0.3]
+    BATCHS = [32, 64, 128, 256]
+    embedding = [32, 64, 128, 256]
 
 ## Visualisation
 The Figure folder contains all the data and code used to draw the graph. Where generation data.ipynb is used for the generation and visualisation code for the synthetic dataset and Figure(1).ipynb is used to draw all other figures. The data used to draw the plots is also contained in this folder.
