@@ -58,9 +58,10 @@ The response prediction results will be saved in the result_out.csv file, locate
 
 ## Self-adaptive Loss Weights Studies
 The experimental results presented in Table 3 can be obtained by running the SAM model with the following settings:
+
 dataset='generation', model_name='SAM_GCN', batch_size=128, epochs=128, lr=0.1, lambda=0.1, emb_dim=128, residual_training=True, MMD=True, and k=5.
 
-To evaluate the effect of the hyperparameter lambda, experiments were conducted in the SAM_Alpha folder by running SAM_Alpha0.1, SAM_Alpha0.5, and SAM_Alpha1. The comparison results in Table 3 correspond to setting lambda=[-1, -0.5, -0.1] in the hyperparameter selection process.
+To evaluate the effect of the hyperparameter lambda and alpha, experiments were conducted in the SAM_Alpha folder by running. The comparison results in Table 3 correspond to setting alpha=[0.1, 0.5, 1],lambda=[-1, -0.5, -0.1] in the hyperparameter selection process.
 
 ## Ablation Study
 The results shown in Figure 10 can be obtained by running the corresponding code in the Ablation Study folder. Each folder is named according to the respective method. To reproduce the results, simply set dataset=['cali', 'generation'] and execute the code directly.
