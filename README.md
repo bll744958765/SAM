@@ -102,3 +102,6 @@ k = 5
 
 After training, the predicted results will be located at:
 traind/generation-SAM-SAM_GCN-MAE-size0.1-k5-emb64-lr0.1-bs32-ep500-nor0-xuhao10_2MMD0.1_Apr/result.csv
+
+## Notes
+When reproducing the methodology, it should be noted that the experimental results may fluctuate due to a variety of random factors, including but not limited to the random way of dividing the dataset, differences in the random seed settings, differences in hardware configurations, and changes in software versions. It is normal that these uncontrollable variables may lead to slight deviations of the reproduced results from the original manuscript records. To enhance the credibility of the experimental results, we enhanced the stability of the conclusions by repeating the experiment 10 times independently and counting the mean ± standard deviation of the final metrics (e.g., 75.3 ± 0.8).
