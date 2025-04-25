@@ -76,11 +76,8 @@ The results in Figure 11 can be reproduced by setting the hyperparameters in the
 ## Visualisation
 The Figure folder contains all the data and code required for plotting the figures in the manuscript. Specifically:
 
-generation data.ipynb includes the code for generating and visualizing the synthetic dataset (used in Figure 1).
-
-Figure(1).ipynb is used to generate all other figures.
-
 All necessary datasets for plotting are also provided in this folder.
+Figure code.ipynb include all code for plotting the figures
 
 If you need to regenerate raw data for specific figures, you can execute the corresponding scripts:
 
