@@ -39,10 +39,15 @@ min_val:standardization
 
 ## Comparison test
 
+The experimental results of SAM presented in Table 1 can be reproduced by running the SAM folder with the following configuration:
+DATA = ['generation', 'cali', 'GData', 'Near-surface'], model_name='SAM_GCN', batch_size=128, epochs=500, lr=0.1, lambda=0.1, emb_dim=128, residual_training='True', MMD='True', and k=5.
+The response prediction results are saved in the result_out.csv file, located in the corresponding traind folder after training.
+
+
 The results of the comparative experiments presented in Table 1 can be found in the Comparison folder. Each baseline method is organized and named according to the corresponding dataset. To locate the code for a specific baseline model, navigate to the appropriate subfolder. For example, the code for the LEGNNP-RNP model applied to the synthetic dataset is located in the Comparison/Generation/generation-LEGNNP-RNP directory.
 
 The experimental results presented in Table 2 can be reproduced by running the SAM code with the following configuration:
-dataset='generation', model_name=['SAM_GCN', 'SAM_GAT', 'SAM_GraphSage'], batch_size=128, epochs=128, lr=0.1, lambda=0.1, emb_dim=128, residual_training=[True, False], MMD=[True, False], and k=5.
+dataset='generation', model_name=['SAM_GCN', 'SAM_GAT', 'SAM_GraphSage'], batch_size=128, epochs=500, lr=0.1, lambda=0.1, emb_dim=128, residual_training=[True, False], MMD=[True, False], and k=5.
 The response prediction results are saved in the result_out.csv file, located in the corresponding traind folder after training.
 
 ## Flexibility of the Model
